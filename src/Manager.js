@@ -699,7 +699,7 @@ class GiveawaysManager extends EventEmitter {
 
 /**
  * Emitted when someone entered a giveaway.
- * @event GiveawaysManager#giveawayJoin
+ * @event GiveawaysManager#giveawayEntered
  * @param {Giveaway} giveaway The giveaway instance
  * @param {Discord.GuildMember} member The member who entered the giveaway
  *
