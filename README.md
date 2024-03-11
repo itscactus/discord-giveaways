@@ -22,7 +22,7 @@ Discord Giveaways is a powerful [Node.js](https://nodejs.org) module that allows
 ## Installation
 
 ```bash
-npm install --save discord-giveaways
+npm install --save @cactusdev/discord-giveaways
 ```
 
 ## Examples
@@ -51,8 +51,7 @@ const manager = new GiveawaysManager(client, {
     default: {
         botsCanWin: false,
         embedColor: '#FF0000',
-        embedColorEnd: '#000000',
-        reaction: '🎉'
+        embedColorEnd: '#000000'
     }
 });
 // We now have a giveawaysManager property to access the manager everywhere!
@@ -84,12 +83,32 @@ client.on('interactionCreate', (interaction) => {
         const duration = interaction.options.getString('duration');
         const winnerCount = interaction.options.getInteger('winners');
         const prize = interaction.options.getString('prize');
-
         client.giveawaysManager
             .start(interaction.channel, {
                 duration: ms(duration),
                 winnerCount,
-                prize
+                prize,
+                button: {
+                    label: 'Katıl',
+                    style: ButtonStyle.Secondary,
+                    emoji: '🎉'
+                },
+                messages: {
+                    giveaway: '🎉🎉 **ÇEKİLİŞ** 🎉🎉',
+                    giveawayEnded: '🎉🎉 **ÇEKİLİŞ BİTTİ** 🎉🎉',
+                    title: '{this.prize}',
+                    drawing: 'Kalan Süre: {timestamp}',
+                    dropMessage: '🎉 ile tepki vererek ilk katılan siz olun!',
+                    inviteToParticipate: 'Katılmak için 🎉 tepkisine tıkla!',
+                    winMessage: 'Tebrikler, {winners}! **{this.prize}** ödülünü kazandınız.!\n{this.messageURL}',
+                    embedFooter: '{this.winnerCount} kazanan(lar)',
+                    noWinner: 'Çekiliş yetersiz katılımcıdan iptal oldu.',
+                    hostedBy: 'Oluşturan: {this.hostedBy}',
+                    winners: 'Kazanan(lar):',
+                    endedAt: 'Sona Erme Tarihi',
+                    alreadyJoined: 'Çekilişe zaten katılmışın.',
+                    joined: 'Çekilişe başarıyla katıldın.'
+                }
             })
             .then((data) => {
                 console.log(data); // {...} (messageId, end date and more)
@@ -291,6 +310,27 @@ client.giveawaysManager.start(interaction.channel, {
     winnerCount: 1,
     prize: 'Free Steam Key',
     // Only members who have the "Nitro Boost" role are able to win
+    button: {
+        label: 'Katıl',
+        style: ButtonStyle.Secondary,
+        emoji: '🎉'
+    },
+    messages: {
+        giveaway: '🎉🎉 **ÇEKİLİŞ** 🎉🎉',
+        giveawayEnded: '🎉🎉 **ÇEKİLİŞ BİTTİ** 🎉🎉',
+        title: '{this.prize}',
+        drawing: 'Kalan Süre: {timestamp}',
+        dropMessage: '🎉 ile tepki vererek ilk katılan siz olun!',
+        inviteToParticipate: 'Katılmak için 🎉 tepkisine tıkla!',
+        winMessage: 'Tebrikler, {winners}! **{this.prize}** ödülünü kazandınız.!\n{this.messageURL}',
+        embedFooter: '{this.winnerCount} kazanan(lar)',
+        noWinner: 'Çekiliş yetersiz katılımcıdan iptal oldu.',
+        hostedBy: 'Oluşturan: {this.hostedBy}',
+        winners: 'Kazanan(lar):',
+        endedAt: 'Sona Erme Tarihi',
+        alreadyJoined: 'Çekilişe zaten katılmışın.',
+        joined: 'Çekilişe başarıyla katıldın.'
+    }
     exemptMembers: (member, giveaway) => !member.roles.cache.some((r) => r.name === 'Nitro Boost')
 });
 ```
@@ -304,6 +344,27 @@ client.giveawaysManager.start(interaction.channel, {
     duration: 60000,
     winnerCount: 1,
     prize: 'Free Steam Key',
+    button: {
+        label: 'Katıl',
+        style: ButtonStyle.Secondary,
+        emoji: '🎉'
+    },
+    messages: {
+        giveaway: '🎉🎉 **ÇEKİLİŞ** 🎉🎉',
+        giveawayEnded: '🎉🎉 **ÇEKİLİŞ BİTTİ** 🎉🎉',
+        title: '{this.prize}',
+        drawing: 'Kalan Süre: {timestamp}',
+        dropMessage: '🎉 ile tepki vererek ilk katılan siz olun!',
+        inviteToParticipate: 'Katılmak için 🎉 tepkisine tıkla!',
+        winMessage: 'Tebrikler, {winners}! **{this.prize}** ödülünü kazandınız.!\n{this.messageURL}',
+        embedFooter: '{this.winnerCount} kazanan(lar)',
+        noWinner: 'Çekiliş yetersiz katılımcıdan iptal oldu.',
+        hostedBy: 'Oluşturan: {this.hostedBy}',
+        winners: 'Kazanan(lar):',
+        endedAt: 'Sona Erme Tarihi',
+        alreadyJoined: 'Çekilişe zaten katılmışın.',
+        joined: 'Çekilişe başarıyla katıldın.'
+    }
     // Only members who have the the role which is assigned to "roleName" are able to win
     exemptMembers: new Function(
         'member',
@@ -332,6 +393,27 @@ client.giveawaysManager.start(interaction.channel, {
     duration: 60000,
     winnerCount: 1,
     prize: 'Discord Nitro!',
+    button: {
+        label: 'Katıl',
+        style: ButtonStyle.Secondary,
+        emoji: '🎉'
+    },
+    messages: {
+        giveaway: '🎉🎉 **ÇEKİLİŞ** 🎉🎉',
+        giveawayEnded: '🎉🎉 **ÇEKİLİŞ BİTTİ** 🎉🎉',
+        title: '{this.prize}',
+        drawing: 'Kalan Süre: {timestamp}',
+        dropMessage: '🎉 ile tepki vererek ilk katılan siz olun!',
+        inviteToParticipate: 'Katılmak için 🎉 tepkisine tıkla!',
+        winMessage: 'Tebrikler, {winners}! **{this.prize}** ödülünü kazandınız.!\n{this.messageURL}',
+        embedFooter: '{this.winnerCount} kazanan(lar)',
+        noWinner: 'Çekiliş yetersiz katılımcıdan iptal oldu.',
+        hostedBy: 'Oluşturan: {this.hostedBy}',
+        winners: 'Kazanan(lar):',
+        endedAt: 'Sona Erme Tarihi',
+        alreadyJoined: 'Çekilişe zaten katılmışın.',
+        joined: 'Çekilişe başarıyla katıldın.'
+    }
     lastChance: {
         enabled: true,
         content: '⚠️ **LAST CHANCE TO ENTER !** ⚠️',
@@ -358,6 +440,27 @@ client.giveawaysManager.start(interaction.channel, {
     duration: 60000,
     winnerCount: 1,
     prize: 'Discord Nitro!',
+    button: {
+        label: 'Katıl',
+        style: ButtonStyle.Secondary,
+        emoji: '🎉'
+    },
+    messages: {
+        giveaway: '🎉🎉 **ÇEKİLİŞ** 🎉🎉',
+        giveawayEnded: '🎉🎉 **ÇEKİLİŞ BİTTİ** 🎉🎉',
+        title: '{this.prize}',
+        drawing: 'Kalan Süre: {timestamp}',
+        dropMessage: '🎉 ile tepki vererek ilk katılan siz olun!',
+        inviteToParticipate: 'Katılmak için 🎉 tepkisine tıkla!',
+        winMessage: 'Tebrikler, {winners}! **{this.prize}** ödülünü kazandınız.!\n{this.messageURL}',
+        embedFooter: '{this.winnerCount} kazanan(lar)',
+        noWinner: 'Çekiliş yetersiz katılımcıdan iptal oldu.',
+        hostedBy: 'Oluşturan: {this.hostedBy}',
+        winners: 'Kazanan(lar):',
+        endedAt: 'Sona Erme Tarihi',
+        alreadyJoined: 'Çekilişe zaten katılmışın.',
+        joined: 'Çekilişe başarıyla katıldın.'
+    }
     pauseOptions: {
         isPaused: true,
         content: '⚠️ **THIS GIVEAWAY IS PAUSED !** ⚠️',
@@ -387,6 +490,27 @@ client.giveawaysManager.start(interaction.channel, {
     duration: 60000,
     winnerCount: 1,
     prize: 'Free Steam Key',
+    button: {
+        label: 'Katıl',
+        style: ButtonStyle.Secondary,
+        emoji: '🎉'
+    },
+    messages: {
+        giveaway: '🎉🎉 **ÇEKİLİŞ** 🎉🎉',
+        giveawayEnded: '🎉🎉 **ÇEKİLİŞ BİTTİ** 🎉🎉',
+        title: '{this.prize}',
+        drawing: 'Kalan Süre: {timestamp}',
+        dropMessage: '🎉 ile tepki vererek ilk katılan siz olun!',
+        inviteToParticipate: 'Katılmak için 🎉 tepkisine tıkla!',
+        winMessage: 'Tebrikler, {winners}! **{this.prize}** ödülünü kazandınız.!\n{this.messageURL}',
+        embedFooter: '{this.winnerCount} kazanan(lar)',
+        noWinner: 'Çekiliş yetersiz katılımcıdan iptal oldu.',
+        hostedBy: 'Oluşturan: {this.hostedBy}',
+        winners: 'Kazanan(lar):',
+        endedAt: 'Sona Erme Tarihi',
+        alreadyJoined: 'Çekilişe zaten katılmışın.',
+        joined: 'Çekilişe başarıyla katıldın.'
+    }
     bonusEntries: [
         {
             // Members who have the "Nitro Boost" role get 2 bonus entries
@@ -473,19 +597,26 @@ client.giveawaysManager.start(interaction.channel, {
     duration: ms(duration),
     winnerCount,
     prize,
+    button: {
+        label: 'Katıl',
+        style: ButtonStyle.Secondary,
+        emoji: '🎉'
+    },
     messages: {
-        giveaway: '🎉🎉 **GIVEAWAY** 🎉🎉',
-        giveawayEnded: '🎉🎉 **GIVEAWAY ENDED** 🎉🎉',
+        giveaway: '🎉🎉 **ÇEKİLİŞ** 🎉🎉',
+        giveawayEnded: '🎉🎉 **ÇEKİLİŞ BİTTİ** 🎉🎉',
         title: '{this.prize}',
-        drawing: 'Drawing: {timestamp}',
-        dropMessage: 'Be the first to react with 🎉 !',
-        inviteToParticipate: 'React with 🎉 to participate!',
-        winMessage: 'Congratulations, {winners}! You won **{this.prize}**!\n{this.messageURL}',
-        embedFooter: '{this.winnerCount} winner(s)',
-        noWinner: 'Giveaway cancelled, no valid participations.',
-        hostedBy: 'Hosted by: {this.hostedBy}',
-        winners: 'Winner(s):',
-        endedAt: 'Ended at'
+        drawing: 'Kalan Süre: {timestamp}',
+        dropMessage: '🎉 ile tepki vererek ilk katılan siz olun!',
+        inviteToParticipate: 'Katılmak için 🎉 tepkisine tıkla!',
+        winMessage: 'Tebrikler, {winners}! **{this.prize}** ödülünü kazandınız.!\n{this.messageURL}',
+        embedFooter: '{this.winnerCount} kazanan(lar)',
+        noWinner: 'Çekiliş yetersiz katılımcıdan iptal oldu.',
+        hostedBy: 'Oluşturan: {this.hostedBy}',
+        winners: 'Kazanan(lar):',
+        endedAt: 'Sona Erme Tarihi',
+        alreadyJoined: 'Çekilişe zaten katılmışın.',
+        joined: 'Çekilişe başarıyla katıldın.'
     }
 });
 ```
