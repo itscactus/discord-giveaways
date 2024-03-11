@@ -326,7 +326,7 @@ class GiveawaysManager extends EventEmitter {
                 ephemeral: true
             })
             giveaway.addEntry(int.user.id)
-            this.emit('giveawayEntered', giveaway, member);
+            this.emit('giveawayEntered', giveaway, int.member);
             int.reply({
                 content: giveaway.messages.joined,
                 ephemeral: true
