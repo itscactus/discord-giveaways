@@ -321,16 +321,16 @@ class GiveawaysManager extends EventEmitter {
             filter: async(int) => [int.customId].includes('joinGiveaway') && int.user.id !== this.client.user.id
         })
         collector.on('collect', (int) => {
-            if(giveaway.entries.includes(int.user.id)) return int.reply({
+            if(giveaway.entries.includes(int.user.id)) return int?.reply({
                 content: giveaway.messages.alreadyJoined,
                 ephemeral: true
-            })
+            }).catch(err => console.log(err))
             giveaway.addEntry(int.user.id)
             this.emit('giveawayEntered', giveaway, int.member);
             int.reply({
                 content: giveaway.messages.joined,
                 ephemeral: true
-            })
+            }).catch(err => console.log(err))
         })
     }
 
