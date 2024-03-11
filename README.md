@@ -15,7 +15,7 @@ Discord Giveaways is a powerful [Node.js](https://nodejs.org) module that allows
 -   📁 Support for all databases! (default is json)
 -   ⚙️ Very customizable! (prize, duration, winners, ignored permissions, bonus entries, etc...)
 -   🚀 Super powerful: start, edit, reroll, end, delete and pause giveaways!
--   💥 Events: giveawayEnded, giveawayRerolled, giveawayDeleted, giveawayReactionAdded, giveawayReactionRemoved, endedGiveawayReactionAdded
+-   💥 Events: giveawayEnded, giveawayRerolled, giveawayDeleted
 -   🕸️ Support for shards!
 -   and much more!
 
@@ -31,7 +31,7 @@ You can read this example bot on GitHub: [discord-giveaways-bot](https://github.
 
 ### Launch of the module
 
-Required Discord Intents: `Guilds` and `GuildMessageReactions`.  
+Required Discord Intents: `Guilds`.  
 Optional Discord Privileged Intent for better performance: `GuildMembers`.
 
 ```js
@@ -39,7 +39,6 @@ const Discord = require('discord.js');
 const client = new Discord.Client({
     intents: [
         Discord.IntentsBitField.Flags.Guilds,
-        Discord.IntentsBitField.Flags.GuildMessageReactions,
         Discord.IntentsBitField.Flags.GuildMembers // Optional, for better performance
     ]
 });

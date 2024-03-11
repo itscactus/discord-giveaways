@@ -300,7 +300,7 @@ class Giveaway extends EventEmitter {
                 !this.options.bonusEntries || typeof this.options.bonusEntries === 'string'
                     ? this.options.bonusEntries || undefined
                     : serialize(this.options.bonusEntries),
-            reaction: this.options.reaction,
+
             winnerIds: this.winnerIds.length ? this.winnerIds : undefined,
             extraData: this.extraData,
             lastChance: this.options.lastChance,
@@ -430,10 +430,16 @@ class Giveaway extends EventEmitter {
         this.entries.push(userId)
         this.manager.saveGiveaway();
     };
+    removeEntry(userId) {
+        let index = this.entries.findIndex(userId)
+        if(index == -1) return;
+        this.entries.slice(index,index+1);
+        this.manager.saveGiveaway();
+    };
 
     /**
-     * Fetches all users of the giveaway reaction, except bots, if not otherwise specified.
-     * @returns {Promise<Discord.Collection<Discord.Snowflake, Discord.User>>} The collection of reaction users.
+     * Fetches all users of the giveaway button, except bots, if not otherwise specified.
+     * @returns {Promise<Discord.Collection<Discord.Snowflake, Discord.User>>} The collection of button users.
      */
     async fetchAllEntrants() {
         return new Promise(async (resolve, reject) => {

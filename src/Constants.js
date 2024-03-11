@@ -148,12 +148,15 @@ exports.PauseOptions = {
  * @property {number} [forceUpdateEvery=null] Force the giveaway messages to be updated at a specific interval.
  * @property {number} [endedGiveawaysLifetime=null] The number of milliseconds after which ended giveaways should get deleted from the DB.<br>⚠ Giveaways deleted from the DB cannot get rerolled anymore!
  * @property {Object} [default] The default options for new giveaways.
+ * @property {Object} [default.button] The default options for new giveaways.
  * @property {boolean} [default.botsCanWin=false] If bots can win giveaways.
  * @property {Discord.PermissionResolvable[]} [default.exemptPermissions=[]] Members with any of these permissions won't be able to win a giveaway.
  * @property {ExemptMembersFunction} [default.exemptMembers] Function to filter members.<br>If true is returned, the member won't be able to win a giveaway.
  * @property {Discord.ColorResolvable} [default.embedColor='#FF0000'] The color of the giveaway embeds when they are running.
  * @property {Discord.ColorResolvable} [default.embedColorEnd='#000000'] The color of the giveaway embeds when they have ended.
- * @property {Discord.EmojiIdentifierResolvable} [default.reaction='🎉'] The reaction to participate in giveaways.
+ * @property {Discord.EmojiIdentifierResolvable} [default.button.emoji='🎉'] Button Emoji
+ * @property {Discord.ButtonStyle} [default.button.style=Discord.ButtonStyle.Secondary] Button Style
+ * @property {string} [default.button.label='Katıl'] Button Label
  * @property {LastChanceOptions} [default.lastChance] The options for the last chance system.
  */
 exports.GiveawaysManagerOptions = {
@@ -166,7 +169,11 @@ exports.GiveawaysManagerOptions = {
         exemptMembers: () => false,
         embedColor: '#FF0000',
         embedColorEnd: '#000000',
-        reaction: '🎉',
+        button: {
+            style: Discord.ButtonStyle.Secondary,
+            label: 'Katıl',
+            emoji: '🎉'
+        },
         lastChance: {
             enabled: false,
             content: '⚠️ **LAST CHANCE TO ENTER !** ⚠️',
