@@ -242,5 +242,11 @@ exports.GiveawayEditOptions = {};
  * @property {PauseOptions} [pauseOptions] The options for the pause system.
  * @property {boolean} [isDrop] If the giveaway is a drop, or not.<br>Drop means that if the amount of valid entrants to the giveaway is the same as "winnerCount" then it immediately ends.
  * @property {Discord.MessageMentionOptions} [allowedMentions] Which mentions should be parsed from the giveaway messages content.
+ * 
+ * cactusdev
+ * 
+ * @property {Discord.ButtonStyle} [buttonStyle] ButtonStyle.
+ * @property {string} [buttonLabel] Button Label.
+ * @property {Discord.EmojiIdentifierResolvable} [buttonEmoji] Button Emoji. 
  */
 exports.GiveawayData = {};

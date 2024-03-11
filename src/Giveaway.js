@@ -132,6 +132,12 @@ class Giveaway extends EventEmitter {
          * @type {?Discord.Message}
          */
         this.message = null;
+
+        /**
+         * Entries data
+         * @type {[]}
+         */
+        this.entries = options.entries;
     }
 
     /**
@@ -175,24 +181,6 @@ class Giveaway extends EventEmitter {
      */
     get embedColorEnd() {
         return this.options.embedColorEnd ?? this.manager.options.default.embedColorEnd;
-    }
-
-    /**
-     * The emoji used for the reaction on the giveaway message.
-     * @type {Discord.EmojiIdentifierResolvable}
-     */
-    get reaction() {
-        if (!this.options.reaction && this.message) {
-            const emoji = Discord.resolvePartialEmoji(this.manager.options.default.reaction);
-            if (!this.message.reactions.cache.has(emoji.id ?? emoji.name)) {
-                const reaction = this.message.reactions.cache.reduce(
-                    (prev, curr) => (curr.count > prev.count ? curr : prev),
-                    { count: 0 }
-                );
-                this.options.reaction = reaction.emoji?.id ?? reaction.emoji?.name;
-            }
-        }
-        return this.options.reaction ?? this.manager.options.default.reaction;
     }
 
     /**
@@ -260,19 +248,6 @@ class Giveaway extends EventEmitter {
     }
 
     /**
-     * The reaction on the giveaway message.
-     * @type {?Discord.MessageReaction}
-     */
-    get messageReaction() {
-        const emoji = Discord.resolvePartialEmoji(this.reaction);
-        return (
-            this.message?.reactions.cache.find((r) =>
-                [r.emoji.name, r.emoji.id].filter(Boolean).includes(emoji?.name ?? emoji?.id)
-            ) ?? null
-        );
-    }
-
-    /**
      * Function to filter members. If true is returned, the member won't be able to win the giveaway.
      * @property {Discord.GuildMember} member The member to check
      * @returns {Promise<boolean>} Whether the member should get exempted
@@ -331,7 +306,11 @@ class Giveaway extends EventEmitter {
             lastChance: this.options.lastChance,
             pauseOptions: this.options.pauseOptions,
             isDrop: this.options.isDrop || undefined,
-            allowedMentions: this.allowedMentions
+            allowedMentions: this.allowedMentions,
+            entries: this.entries,
+            buttonEmoji: this.options.buttonEmoji,
+            buttonLabel: this.options.buttonLabel,
+            buttonStyle: this.options.buttonStyle
         };
     }
 
@@ -447,6 +426,10 @@ class Giveaway extends EventEmitter {
             resolve(message);
         });
     }
+    addEntry(userId) {
+        this.entries.push(userId)
+        this.manager.saveGiveaway();
+    };
 
     /**
      * Fetches all users of the giveaway reaction, except bots, if not otherwise specified.
@@ -457,18 +440,10 @@ class Giveaway extends EventEmitter {
             const message = await this.fetchMessage().catch((err) => reject(err));
             if (!message) return;
             this.message = message;
-            const reaction = this.messageReaction;
-            if (!reaction) return reject('Unable to find the giveaway reaction.');
 
-            let userCollection = await reaction.users.fetch().catch(() => {});
-            if (!userCollection) return reject('Unable to fetch the reaction users.');
-
-            while (userCollection.size % 100 === 0) {
-                const newUsers = await reaction.users.fetch({ after: userCollection.lastKey() });
-                if (newUsers.size === 0) break;
-                userCollection = userCollection.concat(newUsers);
-            }
-
+            // let userCollection = await Promise.all(this.entries.map(async entry => await message.guild.members.fetch(entry)));
+            let userCollection = await Promise.all(this.entries.map(async entry => await this.client.users.fetch(entry)));
+            if (!userCollection) return reject('Unable to fetch the button users.');
             const users = userCollection
                 .filter((u) => !u.bot || u.bot === this.botsCanWin)
                 .filter((u) => u.id !== this.client.user.id);
@@ -548,8 +523,7 @@ class Giveaway extends EventEmitter {
         }
 
         const users = await this.fetchAllEntrants().catch(() => {});
-        if (!users?.size) return [];
-
+        if (users?.size == 0) return [];
         // Bonus Entries
         let userArray;
         if (!this.isDrop && this.bonusEntries.length) {
@@ -564,7 +538,10 @@ class Giveaway extends EventEmitter {
         }
 
         const randomUsers = (amount) => {
-            if (!userArray || userArray.length <= amount) return users.random(amount);
+            if (!userArray || userArray.length <= amount) { 
+                let arr = Array(amount).fill().map(() => users.at(Math.floor(Math.random() * Array.from(users.values()).length)));
+                return arr;
+            }
             /**
              * Random mechanism like https://github.com/discordjs/collection/blob/master/src/index.ts
              * because collections/maps do not allow duplicates and so we cannot use their built in "random" function
